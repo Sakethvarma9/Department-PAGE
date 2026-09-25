@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>XYZ Solutions – Departments</title>
+<style>
+  :root{
+    --ink:#1c1a16;
+    --paper:#faf8f4;
+    --panel:#ffffff;
+    --line:#e4ddd0;
+    --brass:#9c7a3c;
+    --brass-deep:#7a5f2c;
+    --navy:#1f2a3a;
+    --muted:#8a8272;
+    --danger:#a4392f;
+    --danger-bg:#fbeeec;
+    --radius:6px;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Iowan Old Style","Georgia",serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .sans{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;}
+
+  nav{
+    position:sticky;
+    top:env(safe-area-inset-top,0px);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 32px;
+    background:var(--navy);
+    color:#f2ede0;
+    z-index:10;
+  }
+  .brand{
+    font-size:19px;
+    letter-spacing:0.02em;
+  }
+  .brand em{ color:var(--brass); font-style:normal; }
+  .navlinks{ display:flex; gap:28px; font-family:inherit; }
+  .navlinks a{
+    color:#d9d2c1;
+    text-decoration:none;
+    font-size:15px;
+    cursor:pointer;
+    border-bottom:1px solid transparent;
+    padding-bottom:2px;
+    transition:color .15s, border-color .15s;
+  }
+  .navlinks a:hover, .navlinks a:focus-visible{
+    color:#fff;
+    border-color:var(--brass);
+    outline:none;
+  }
+  .navlinks a.active{
+    color:#fff;
+    border-color:var(--brass);
+  }
+
+  .hero{
+    max-width:920px;
+    margin:0 auto;
+    padding:64px 32px 40px;
+  }
+  .hero h1{
+    font-size:38px;
+    font-weight:400;
+    margin:0 0 10px;
+    line-height:1.15;
+  }
+  .hero p{
+    font-family:inherit;
+    color:var(--muted);
+    font-size:16px;
+    max-width:52ch;
+    margin:0;
+  }
+
+  .home-cards{
+    max-width:920px;
+    margin:0 auto;
+    padding:0 32px 96px;
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:18px;
+  }
+  .home-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:22px 20px;
+  }
+  .home-card h3{
+    font-size:18px;
+    font-weight:400;
+    margin:0 0 8px;
+  }
+  .home-card p{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.5;
+    margin:0;
+  }
+  .home-card-link{
+    display:inline-block;
+    margin-top:12px;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    font-size:13.5px;
+    color:var(--brass-deep);
+    text-decoration:none;
+    cursor:pointer;
+  }
+  .home-card-link:hover{ text-decoration:underline; }
+
+  @media (max-width:720px){
+    .home-cards{ grid-template-columns:1fr; }
+  }
+
+  #documents{
+    max-width:920px;
+    margin:0 auto;
+    padding:0 32px 96px;
+    scroll-margin-top:80px;
+  }
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    border-bottom:1px solid var(--line);
+    padding-bottom:14px;
+    margin-bottom:22px;
+  }
+  .section-head h2{
+    font-size:22px;
+    font-weight:400;
+    margin:0;
+  }
+  .count{
+    font-family:inherit;
+    color:var(--muted);
+    font-size:14px;
+  }
+
+  .toolbar-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:14px;
+  }
+  .toolbar-row .search-row{
+    flex:1;
+    margin-bottom:0;
+  }
+  .toolbar-row .btn-primary{
+    flex-shrink:0;
+  }
+
+  .pagination{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    padding:16px 0 0;
+  }
+  .pagination button{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    font-size:13.5px;
+    min-width:32px;
+    padding:6px 10px;
+    border-radius:var(--radius);
+    border:1px solid var(--line);
+    background:var(--panel);
+    color:var(--ink);
+    cursor:pointer;
+  }
+  .pagination button:hover{ background:#f2eee5; }
+  .pagination button.active{
+    background:var(--brass);
+    border-color:var(--brass-deep);
+    color:#fff;
+  }
+  .pagination button:disabled{
+    opacity:0.4;
+    cursor:default;
+  }
+  .pagination button:disabled:hover{ background:var(--panel); }
+
+  .search-row{
+    margin-bottom:14px;
+  }
+  .search-row input{
+    width:100%;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    font-size:15px;
+    padding:10px 14px;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    background:var(--panel);
+    color:var(--ink);
+  }
+  .search-row input:focus{
+    outline:2px solid var(--brass);
+    outline-offset:1px;
+    border-color:var(--brass);
+  }
+
+  th.sortable{
+    cursor:pointer;
+    user-select:none;
+  }
+  th.sortable .sort-arrow{
+    display:inline-block;
+    margin-left:5px;
+    font-size:11px;
+    color:var(--muted);
+  }
+  th.sortable.sort-asc .sort-arrow,
+  th.sortable.sort-desc .sort-arrow{
+    color:var(--brass-deep);
+  }
+
+  thead th.sortable:hover{ color:var(--brass-deep); }
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    background:var(--panel);
+    border:1px solid var(--line);
+  }
+  thead th{
+    text-align:left;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    font-size:12.5px;
+    letter-spacing:0.03em;
+    color:var(--muted);
+    font-weight:600;
+    padding:12px 18px;
+    border-bottom:1px solid var(--line);
+  }
+  th.col-actions, td.col-actions{ text-align:right; }
+  tbody td{
+    padding:15px 18px;
+    border-bottom:1px solid var(--line);
+    font-size:16px;
+    vertical-align:middle;
+  }
+  tbody tr:last-child td{ border-bottom:none; }
+  .code-cell{
+    font-family:"SFMono-Regular",Consolas,Menlo,monospace;
+    color:var(--brass-deep);
+    font-size:14px;
+    letter-spacing:0.01em;
+  }
+  .row-actions{
+    display:flex;
+    gap:8px;
+    justify-content:flex-end;
+  }
+  .row-actions button{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    font-size:13px;
+    padding:6px 12px;
+    border-radius:var(--radius);
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--ink);
+    cursor:pointer;
+    transition:background .15s, border-color .15s;
+  }
+  .row-actions button:hover{ background:#f2eee5; }
+  .row-actions .delete-btn:hover{
+    background:var(--danger-bg);
+    border-color:#e7c7c2;
+    color:var(--danger);
+  }
+
+  .table-footer{
+    display:flex;
+    justify-content:flex-end;
+    padding:14px 18px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-top:none;
+  }
+  .btn-primary{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    font-size:14px;
+    padding:9px 18px;
+    border-radius:var(--radius);
+    border:1px solid var(--brass-deep);
+    background:var(--brass);
+    color:#fff;
+    cursor:pointer;
+    transition:background .15s;
+  }
+  .btn-primary:hover{ background:var(--brass-deep); }
+
+  .empty-state{
+    padding:56px 18px;
+    text-align:center;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-bottom:none;
+  }
+  .empty-state p{
+    font-family:inherit;
+    color:var(--muted);
+    font-size:16px;
+    margin:0;
+  }
+
+  /* Modal */
+  .overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(28,26,22,0.45);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:50;
+  }
+  .overlay.open{ display:flex; }
+  .modal{
+    background:var(--panel);
+    width:100%;
+    max-width:400px;
+    border-radius:8px;
+    padding:28px 26px 22px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.25);
+  }
+  .modal h3{
+    font-size:20px;
+    font-weight:400;
+    margin:0 0 4px;
+  }
+  .modal .sub{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    color:var(--muted);
+    font-size:13px;
+    margin:0 0 20px;
+  }
+  .field{ margin-bottom:16px; }
+  .field label{
+    display:block;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    font-size:12.5px;
+    letter-spacing:0.02em;
+    color:var(--muted);
+    margin-bottom:6px;
+  }
+  .field input{
+    width:100%;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    font-size:15px;
+    padding:10px 12px;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    background:#fff;
+    color:var(--ink);
+  }
+  .field input:focus{
+    outline:2px solid var(--brass);
+    outline-offset:1px;
+    border-color:var(--brass);
+  }
+  .field .err{
+    color:var(--danger);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    font-size:12px;
+    margin-top:5px;
+    display:none;
+  }
+  .field.invalid .err{ display:block; }
+  .field.invalid input{ border-color:var(--danger); }
+  .modal-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin-top:22px;
+  }
+  .btn-ghost{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    font-size:14px;
+    padding:9px 16px;
+    border-radius:var(--radius);
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--ink);
+    cursor:pointer;
+  }
+  .btn-ghost:hover{ background:#f2eee5; }
+
+  @media (max-width:560px){
+    nav{ padding:16px 18px; }
+    .hero{ padding:44px 18px 28px; }
+    .hero h1{ font-size:30px; }
+    #documents{ padding:0 18px 64px; }
+    thead th, tbody td{ padding:11px 10px; font-size:14px; }
+    .row-actions{ flex-wrap:wrap; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">XYZ <em>Solutions</em></div>
+  <div class="navlinks">
+    <a id="home-link" href="#home">Home</a>
+    <a id="dept-link" href="#documents">Departments</a>
+  </div>
+</nav>
+
+<section id="home">
+  <div class="hero">
+    <h1>XYZ Solutions</h1>
+    <p>IT services and support, organized around the departments that keep operations running — infrastructure, applications, security, and more.</p>
+  </div>
+
+  <div class="home-cards">
+    <div class="home-card">
+      <h3>Departments</h3>
+      <p>Browse, add, edit, and remove department records — each with a code and a name.</p>
+      <a class="home-card-link" id="home-dept-link" href="#documents">View departments &rarr;</a>
+    </div>
+    <div class="home-card">
+      <h3>Search &amp; sort</h3>
+      <p>Find any department instantly, and sort the list ascending, descending, or back to original order.</p>
+    </div>
+    <div class="home-card">
+      <h3>Always up to date</h3>
+      <p>Changes save automatically, so the department directory reflects the latest structure.</p>
+    </div>
+  </div>
+</section>
+
+<section id="documents" style="display:none;">
+  <div class="hero" style="padding:32px 0 32px;max-width:none;">
+    <h1>Departments</h1>
+    <p>Codes and names for every IT department — from infrastructure to application support.</p>
+  </div>
+  <div class="section-head">
+    <h2>Document</h2>
+    <span class="count" id="row-count" class="sans">0 records</span>
+  </div>
+
+  <div class="toolbar-row">
+    <div id="search-row" class="search-row">
+      <input type="text" id="search-input" class="sans" placeholder="Search by code or name…">
+    </div>
+    <button class="btn-primary" id="new-btn">+ New</button>
+  </div>
+
+  <div id="empty-state" class="empty-state" style="display:none;">
+    <p>No departments yet. Add the first one below.</p>
+  </div>
+
+  <div id="no-results" class="empty-state" style="display:none;">
+    <p>No departments match your search.</p>
+  </div>
+
+  <table id="dept-table" style="display:none;">
+    <thead>
+      <tr>
+        <th class="sortable" data-col="code" style="width:30%;">Code<span class="sort-arrow"></span></th>
+        <th class="sortable" data-col="name">Name<span class="sort-arrow"></span></th>
+        <th class="col-actions" style="width:170px;">Actions</th>
+      </tr>
+    </thead>
+    <tbody id="dept-body"></tbody>
+  </table>
+
+  <div id="pagination" class="pagination sans" style="display:none;"></div>
+</section>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h3 id="modal-title">New department</h3>
+    <p class="sub" id="modal-sub">Enter a code and a name.</p>
+
+    <div class="field" id="code-field">
+      <label for="code-input">Code</label>
+      <input id="code-input" type="text" autocomplete="off" placeholder="e.g. IT-01">
+      <div class="err">Enter a code.</div>
+    </div>
+
+    <div class="field" id="name-field">
+      <label for="name-input">Name</label>
+      <input id="name-input" type="text" autocomplete="off" placeholder="e.g. Network Infrastructure">
+      <div class="err">Enter a name.</div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-ghost" id="cancel-btn">Cancel</button>
+      <button class="btn-primary" id="save-btn">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var STORAGE_KEY = 'pj_departments';
+  var editingId = null;
+
+  var DUMMY_ROWS = [
+    { id: 'seed-1', code: 'IT-01', name: 'Network Infrastructure' },
+    { id: 'seed-2', code: 'IT-02', name: 'Application Support' },
+    { id: 'seed-3', code: 'IT-03', name: 'Cybersecurity' },
+    { id: 'seed-4', code: 'IT-04', name: 'Database Administration' },
+    { id: 'seed-5', code: 'IT-05', name: 'IT Helpdesk' },
+    { id: 'seed-6', code: 'IT-06', name: 'Cloud Operations' },
+    { id: 'seed-7', code: 'IT-07', name: 'DevOps Engineering' },
+    { id: 'seed-8', code: 'IT-08', name: 'IT Procurement' },
+    { id: 'seed-9', code: 'IT-09', name: 'Quality Assurance' },
+    { id: 'seed-10', code: 'IT-10', name: 'Business Intelligence' },
+    { id: 'seed-11', code: 'IT-11', name: 'IT Training' },
+    { id: 'seed-12', code: 'IT-12', name: 'Enterprise Architecture' },
+    { id: 'seed-13', code: 'IT-13', name: 'Data Privacy & Compliance' }
+  ];
+
+  function loadRows(){
+    var existing = [];
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      var parsed = raw ? JSON.parse(raw) : [];
+      if(Array.isArray(parsed)){ existing = parsed; }
+    }catch(e){ existing = []; }
+
+    var existingCodes = existing.map(function(r){ return r.code.toLowerCase(); });
+    var toAdd = DUMMY_ROWS.filter(function(d){
+      return existingCodes.indexOf(d.code.toLowerCase()) === -1;
+    });
+
+    var merged = existing.concat(toAdd);
+    if(toAdd.length > 0){ saveRows(merged); }
+    return merged;
+  }
+  function saveRows(rows){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(rows)); }catch(e){}
+  }
+
+  var rows = loadRows();
+  var searchTerm = '';
+  // sortState: null = no sorting (insertion order), otherwise { col: 'code'|'name', dir: 'asc'|'desc' }
+  var sortState = null;
+  var PAGE_SIZE = 8;
+  var currentPage = 1;
+
+  var tableEl = document.getElementById('dept-table');
+  var bodyEl = document.getElementById('dept-body');
+  var emptyEl = document.getElementById('empty-state');
+  var noResultsEl = document.getElementById('no-results');
+  var searchRowEl = document.getElementById('search-row');
+  var searchInputEl = document.getElementById('search-input');
+  var countEl = document.getElementById('row-count');
+  var overlay = document.getElementById('overlay');
+  var modalTitle = document.getElementById('modal-title');
+  var modalSub = document.getElementById('modal-sub');
+  var codeInput = document.getElementById('code-input');
+  var nameInput = document.getElementById('name-input');
+  var codeField = document.getElementById('code-field');
+  var nameField = document.getElementById('name-field');
+  var sortHeaders = document.querySelectorAll('th.sortable');
+  var paginationEl = document.getElementById('pagination');
+
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+
+  function getVisibleRows(){
+    var term = searchTerm.trim().toLowerCase();
+    var visible = term
+      ? rows.filter(function(r){
+          return r.code.toLowerCase().indexOf(term) !== -1 ||
+                 r.name.toLowerCase().indexOf(term) !== -1;
+        })
+      : rows.slice();
+
+    if(sortState){
+      visible.sort(function(a, b){
+        var av = a[sortState.col].toLowerCase();
+        var bv = b[sortState.col].toLowerCase();
+        if(av < bv) return sortState.dir === 'asc' ? -1 : 1;
+        if(av > bv) return sortState.dir === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+    return visible;
+  }
+
+  function updateSortHeaderClasses(){
+    sortHeaders.forEach(function(th){
+      var col = th.getAttribute('data-col');
+      th.classList.remove('sort-asc', 'sort-desc');
+      var arrow = th.querySelector('.sort-arrow');
+      if(sortState && sortState.col === col){
+        th.classList.add(sortState.dir === 'asc' ? 'sort-asc' : 'sort-desc');
+        arrow.textContent = sortState.dir === 'asc' ? '▲' : '▼';
+      }else{
+        arrow.textContent = '⇅';
+      }
+    });
+  }
+
+  function renderPagination(totalItems){
+    var totalPages = Math.ceil(totalItems / PAGE_SIZE);
+    if(totalPages <= 1){
+      paginationEl.style.display = 'none';
+      paginationEl.innerHTML = '';
+      return;
+    }
+    paginationEl.style.display = 'flex';
+
+    var html = '<button type="button" id="page-prev"' + (currentPage === 1 ? ' disabled' : '') + '>&larr;</button>';
+    for(var p = 1; p <= totalPages; p++){
+      html += '<button type="button" class="page-num' + (p === currentPage ? ' active' : '') + '" data-page="' + p + '">' + p + '</button>';
+    }
+    html += '<button type="button" id="page-next"' + (currentPage === totalPages ? ' disabled' : '') + '>&rarr;</button>';
+    paginationEl.innerHTML = html;
+
+    var prevBtn = document.getElementById('page-prev');
+    var nextBtn = document.getElementById('page-next');
+    if(prevBtn) prevBtn.addEventListener('click', function(){
+      if(currentPage > 1){ currentPage--; render(); }
+    });
+    if(nextBtn) nextBtn.addEventListener('click', function(){
+      if(currentPage < totalPages){ currentPage++; render(); }
+    });
+    paginationEl.querySelectorAll('.page-num').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        currentPage = parseInt(btn.getAttribute('data-page'), 10);
+        render();
+      });
+    });
+  }
+
+  function render(){
+    var hasAnyRows = rows.length > 0;
+    searchRowEl.style.display = hasAnyRows ? 'block' : 'none';
+
+    if(!hasAnyRows){
+      tableEl.style.display = 'none';
+      emptyEl.style.display = 'block';
+      noResultsEl.style.display = 'none';
+      paginationEl.style.display = 'none';
+      countEl.textContent = '0 records';
+      bodyEl.innerHTML = '';
+      updateSortHeaderClasses();
+      return;
+    }
+
+    emptyEl.style.display = 'none';
+
+    var visible = getVisibleRows();
+    countEl.textContent = rows.length + (rows.length === 1 ? ' record' : ' records') +
+      (searchTerm.trim() ? ' · ' + visible.length + ' shown' : '');
+
+    if(visible.length === 0){
+      tableEl.style.display = 'none';
+      noResultsEl.style.display = 'block';
+      paginationEl.style.display = 'none';
+      currentPage = 1;
+      updateSortHeaderClasses();
+      return;
+    }
+
+    tableEl.style.display = 'table';
+    noResultsEl.style.display = 'none';
+
+    var totalPages = Math.ceil(visible.length / PAGE_SIZE);
+    if(currentPage > totalPages){ currentPage = totalPages; }
+    if(currentPage < 1){ currentPage = 1; }
+
+    var startIdx = (currentPage - 1) * PAGE_SIZE;
+    var pageRows = visible.slice(startIdx, startIdx + PAGE_SIZE);
+
+    bodyEl.innerHTML = pageRows.map(function(r){
+      return '<tr data-id="'+r.id+'">' +
+        '<td class="code-cell">'+escapeHtml(r.code)+'</td>' +
+        '<td>'+escapeHtml(r.name)+'</td>' +
+        '<td class="col-actions">' +
+          '<div class="row-actions">' +
+            '<button class="edit-btn" type="button">Edit</button>' +
+            '<button class="delete-btn" type="button">Delete</button>' +
+          '</div>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+
+    renderPagination(visible.length);
+    updateSortHeaderClasses();
+  }
+
+  function openModal(mode, row){
+    editingId = row ? row.id : null;
+    codeField.classList.remove('invalid');
+    nameField.classList.remove('invalid');
+    if(mode === 'edit'){
+      modalTitle.textContent = 'Edit department';
+      modalSub.textContent = 'Update the code or name, then save.';
+      codeInput.value = row.code;
+      nameInput.value = row.name;
+    }else{
+      modalTitle.textContent = 'New department';
+      modalSub.textContent = 'Enter a code and a name.';
+      codeInput.value = '';
+      nameInput.value = '';
+    }
+    overlay.classList.add('open');
+    setTimeout(function(){ codeInput.focus(); }, 0);
+  }
+
+  function closeModal(){
+    overlay.classList.remove('open');
+    editingId = null;
+  }
+
+  function handleSave(){
+    var code = codeInput.value.trim();
+    var name = nameInput.value.trim();
+    var valid = true;
+
+    if(!code){ codeField.classList.add('invalid'); valid = false; }
+    else{ codeField.classList.remove('invalid'); }
+
+    if(!name){ nameField.classList.add('invalid'); valid = false; }
+    else{ nameField.classList.remove('invalid'); }
+
+    if(!valid) return;
+
+    if(editingId){
+      var row = rows.find(function(r){ return r.id === editingId; });
+      if(row){ row.code = code; row.name = name; }
+    }else{
+      rows.push({ id: Date.now() + '-' + Math.random().toString(36).slice(2,7), code: code, name: name });
+    }
+    saveRows(rows);
+    render();
+    closeModal();
+  }
+
+  document.getElementById('new-btn').addEventListener('click', function(){
+    openModal('new', null);
+  });
+  document.getElementById('cancel-btn').addEventListener('click', closeModal);
+  document.getElementById('save-btn').addEventListener('click', handleSave);
+  overlay.addEventListener('click', function(e){
+    if(e.target === overlay) closeModal();
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+  });
+
+  bodyEl.addEventListener('click', function(e){
+    var tr = e.target.closest('tr');
+    if(!tr) return;
+    var id = tr.getAttribute('data-id');
+    var row = rows.find(function(r){ return r.id === id; });
+    if(!row) return;
+
+    if(e.target.classList.contains('edit-btn')){
+      openModal('edit', row);
+    }else if(e.target.classList.contains('delete-btn')){
+      rows = rows.filter(function(r){ return r.id !== id; });
+      saveRows(rows);
+      render();
+    }
+  });
+
+  searchInputEl.addEventListener('input', function(e){
+    searchTerm = e.target.value;
+    currentPage = 1;
+    render();
+  });
+
+  sortHeaders.forEach(function(th){
+    th.addEventListener('click', function(){
+      var col = th.getAttribute('data-col');
+      if(!sortState || sortState.col !== col){
+        sortState = { col: col, dir: 'asc' };
+      }else if(sortState.dir === 'asc'){
+        sortState = { col: col, dir: 'desc' };
+      }else{
+        sortState = null; // third click: back to no sorting
+      }
+      currentPage = 1;
+      render();
+    });
+  });
+
+  var homeSection = document.getElementById('home');
+  var docsSection = document.getElementById('documents');
+  var homeLink = document.getElementById('home-link');
+  var deptLink = document.getElementById('dept-link');
+
+  function showHome(){
+    homeSection.style.display = 'block';
+    docsSection.style.display = 'none';
+    homeLink.classList.add('active');
+    deptLink.classList.remove('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function showDepartments(){
+    homeSection.style.display = 'none';
+    docsSection.style.display = 'block';
+    deptLink.classList.add('active');
+    homeLink.classList.remove('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  homeLink.addEventListener('click', function(e){ e.preventDefault(); showHome(); });
+  deptLink.addEventListener('click', function(e){ e.preventDefault(); showDepartments(); });
+  document.getElementById('home-dept-link').addEventListener('click', function(e){
+    e.preventDefault();
+    showDepartments();
+  });
+
+  showHome();
+  render();
+})();
+</script>
+
+</body>
+</html>
