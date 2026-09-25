@@ -417,7 +417,7 @@
 <body>
 
 <nav>
-  <div class="brand">XYZ <em>Solutions</em></div>
+  <a id="brand-link" class="brand" href="#home" style="text-decoration:none;cursor:pointer;color:inherit;">XYZ <em>Solutions</em></a>
   <div class="navlinks">
     <a id="home-link" href="#home">Home</a>
     <a id="dept-link" href="#documents">Departments</a>
@@ -825,6 +825,7 @@
   }
 
   homeLink.addEventListener('click', function(e){ e.preventDefault(); showHome(); });
+  document.getElementById('brand-link').addEventListener('click', function(e){ e.preventDefault(); showHome(); });
   deptLink.addEventListener('click', function(e){ e.preventDefault(); showDepartments(); });
   document.getElementById('home-dept-link').addEventListener('click', function(e){
     e.preventDefault();
